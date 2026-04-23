@@ -1,7 +1,6 @@
 package org.sabaini.pokedex.util
 
 import androidx.compose.ui.graphics.Color
-import org.sabaini.pokedex.R
 
 object Enums {
     enum class StatType(val stat: String, val color: Color) {
@@ -33,16 +32,5 @@ object Enums {
         STEEL(Color(0xffb8b8cf)),
         FAIRY(Color(0xfff599ac)),
         UNDEFINED(Color(0xff60a090)),
-    }
-
-    enum class Generations(val gen: String, val drawable: Int) {
-        GEN_1("Generation I", R.drawable.gen_1),
-        GEN_2("Generation II", R.drawable.gen_2),
-        GEN_3("Generation III", R.drawable.gen_3),
-        GEN_4("Generation IV", R.drawable.gen_4),
-        GEN_5("Generation V", R.drawable.gen_5),
-        GEN_6("Generation VI", R.drawable.gen_6),
-        GEN_7("Generation VII", R.drawable.gen_7),
-        GEN_8("Generation VIII", R.drawable.gen_8),
     }
 }
