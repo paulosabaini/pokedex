@@ -62,9 +62,7 @@ fun PokemonScreen(
 private fun PokemonInfoLoading() {
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth().padding(
-            top = dimensionResource(R.dimen.dimen_of_16_dp),
-        ),
+        modifier = Modifier.fillMaxWidth().padding(dimensionResource(R.dimen.dimen_of_16_dp)),
     ) {
         CircularProgressIndicator(
             color = MaterialTheme.colorScheme.primary,
@@ -80,7 +78,7 @@ private fun PokemonInfoError() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(dimensionResource(R.dimen.dimen_of_16_dp)),
     ) {
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dimen_of_16_dp)))
         Icon(
@@ -107,15 +105,17 @@ private fun PokemonInfo(
     }
 
     Column(modifier = Modifier.background(color = pokemon.backgroundColor ?: LightGray)) {
-        PokemonNameAndNumber(
-            pokemonName = pokemon.name,
-            pokemonNumber = pokemon.getFormattedPokemonNumber(),
-        )
-        PokemonTypes(types = pokemon.types)
-        PokemonInfoImage(
-            pokemonName = pokemon.name,
-            pokemonImageUrl = pokemon.getImageUrl(),
-        )
+        Column(modifier = Modifier.padding(dimensionResource(R.dimen.dimen_of_16_dp))) {
+            PokemonNameAndNumber(
+                pokemonName = pokemon.name,
+                pokemonNumber = pokemon.getFormattedPokemonNumber(),
+            )
+            PokemonTypes(types = pokemon.types)
+            PokemonInfoImage(
+                pokemonName = pokemon.name,
+                pokemonImageUrl = pokemon.getImageUrl(),
+            )
+        }
         PokemonInfoTabs(pokemon)
     }
 }
