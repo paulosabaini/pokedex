@@ -15,15 +15,16 @@ import org.sabaini.pokedex.data.PokemonsSource
 import org.sabaini.pokedex.domain.usecase.UpdatePokemonColorUseCase
 import org.sabaini.pokedex.util.Constants.PAGING_SIZE
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class PokedexViewModel @Inject constructor(
-    private val source: PokemonsSource,
+    private val sourceProvider: Provider<PokemonsSource>,
     private val updatePokemonColorUseCase: UpdatePokemonColorUseCase,
 ) : ViewModel() {
 
     val pokeFlow: Flow<PagingData<PokemonUiState>> = Pager(PagingConfig(PAGING_SIZE)) {
-        source
+        sourceProvider.get()
     }.flow
         .map { pagingData -> pagingData.map { it.toUiState() } }
         .cachedIn(viewModelScope)

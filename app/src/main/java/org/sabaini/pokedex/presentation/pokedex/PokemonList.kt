@@ -15,6 +15,9 @@ import androidx.paging.compose.LazyPagingItems
 import org.sabaini.pokedex.R
 import org.sabaini.pokedex.util.Constants
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.dp
+
 @Composable
 fun PokemonList(
     modifier: Modifier = Modifier,
@@ -25,8 +28,12 @@ fun PokemonList(
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Adaptive(minSize = dimensionResource(R.dimen.dimen_of_150_dp)),
+        contentPadding = PaddingValues(8.dp),
     ) {
-        items(pokemons.itemCount) { index ->
+        items(
+            count = pokemons.itemCount,
+            key = { index -> pokemons[index]?.name ?: index },
+        ) { index ->
             pokemons[index]?.let {
                 PokemonCard(
                     pokemon = it,

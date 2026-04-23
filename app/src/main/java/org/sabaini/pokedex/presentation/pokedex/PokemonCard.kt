@@ -1,13 +1,12 @@
 package org.sabaini.pokedex.presentation.pokedex
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.ui.Alignment
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,12 +17,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import coil.request.ImageRequest
 import org.sabaini.pokedex.R
 import org.sabaini.pokedex.presentation.theme.LightGray
 import org.sabaini.pokedex.util.ColorUtils
@@ -36,9 +38,8 @@ fun PokemonCard(
     onCalculateDominantColor: (Color) -> Unit,
     onItemClicked: (String) -> Unit,
 ) {
-    var containerColor by remember {
-        mutableStateOf(pokemon.backgroundColor ?: LightGray)
-    }
+    val containerColor = pokemon.backgroundColor ?: LightGray
+
     Card(
         onClick = { onItemClicked(pokemon.name) },
         colors = CardDefaults.cardColors(containerColor = containerColor),
@@ -50,10 +51,8 @@ fun PokemonCard(
         PokemonCardImage(
             pokemonName = pokemon.name,
             pokemonImageUrl = pokemon.getImageUrl(),
-            onCalculateDominantColor = {
-                containerColor = it
-                onCalculateDominantColor(it)
-            },
+            backgroundColor = pokemon.backgroundColor,
+            onCalculateDominantColor = onCalculateDominantColor,
         )
     }
 }
@@ -82,6 +81,7 @@ private fun PokemonCardHeader(pokemon: PokemonUiState) {
 private fun PokemonCardImage(
     pokemonName: String,
     pokemonImageUrl: String,
+    backgroundColor: Color?,
     onCalculateDominantColor: (Color) -> Unit,
 ) {
     var showLoading by remember { mutableStateOf(true) }
@@ -93,7 +93,10 @@ private fun PokemonCardImage(
         contentAlignment = Alignment.Center,
     ) {
         AsyncImage(
-            model = pokemonImageUrl,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(pokemonImageUrl)
+                .crossfade(true)
+                .build(),
             contentDescription = pokemonName,
             modifier = Modifier.fillMaxSize(),
             onState = { painterState ->
@@ -102,8 +105,10 @@ private fun PokemonCardImage(
                     is AsyncImagePainter.State.Empty -> true
                     is AsyncImagePainter.State.Error -> true
                     is AsyncImagePainter.State.Success -> {
-                        ColorUtils.calculateDominantColor(painterState.result.drawable) {
-                            onCalculateDominantColor(it)
+                        if (backgroundColor == null) {
+                            ColorUtils.calculateDominantColor(painterState.result.drawable) {
+                                onCalculateDominantColor(it)
+                            }
                         }
                         false
                     }

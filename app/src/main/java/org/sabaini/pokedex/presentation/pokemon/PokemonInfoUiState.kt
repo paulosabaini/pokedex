@@ -16,8 +16,8 @@ data class PokemonInfoUiState(
     val description: String = Constants.BLANK,
     val height: Int = Constants.ZERO,
     val weight: Int = Constants.ZERO,
-    var backgroundColor: Color? = null,
-    var borderColor: Color? = null,
+    val backgroundColor: Color? = null,
+    val borderColor: Color? = null,
     val baseStats: List<PokemonInfoStatUiState> = listOf(),
     val evolutionChain: List<PokemonInfoEvolutionUiState> = listOf(),
 ) {

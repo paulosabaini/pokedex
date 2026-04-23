@@ -8,10 +8,10 @@ import org.sabaini.pokedex.util.PokemonUtils.getDisplayPokemonNumber
 import org.sabaini.pokedex.util.PokemonUtils.getPokemonImageUrl
 
 data class PokemonUiState(
-    var page: Int,
+    val page: Int,
     val name: String,
     val url: String,
-    var backgroundColor: Color? = null,
+    val backgroundColor: Color? = null,
 ) {
     private fun getPokemonNumber(): String {
         return url.split(SLASH.toRegex()).dropLast(ONE).last()

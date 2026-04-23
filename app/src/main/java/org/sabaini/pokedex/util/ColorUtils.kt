@@ -12,12 +12,17 @@ object ColorUtils {
         drawable: Drawable,
         onFinish: (Color) -> Unit,
     ) {
-        val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        if (drawable is BitmapDrawable) {
+            val bmp = drawable.bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
-        Palette.from(bmp).generate { palette ->
-            palette?.dominantSwatch?.rgb?.let {
-                onFinish(Color(it))
-            }
+            Palette.from(bmp)
+                .maximumColorCount(12)
+                .resizeBitmapArea(100 * 100)
+                .generate { palette ->
+                    palette?.dominantSwatch?.rgb?.let {
+                        onFinish(Color(it))
+                    }
+                }
         }
     }
 }

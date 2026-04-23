@@ -17,7 +17,7 @@ fun PokemonLocalModel.toDomain(): Pokemon {
 
 fun List<PokemonLocalModel>.toDomain(): List<Pokemon> = map { it.toDomain() }
 
-fun PokemonInfoLocalModel?.toDomain(): PokemonInfo? {
+fun PokemonInfoLocalModel?.toDomain(backgroundColor: Int? = null): PokemonInfo? {
     return this?.let {
         PokemonInfo(
             id = it.id,
@@ -26,7 +26,7 @@ fun PokemonInfoLocalModel?.toDomain(): PokemonInfo? {
             description = it.description,
             height = it.height,
             weight = it.weight,
-            backgroundColor = null,
+            backgroundColor = backgroundColor,
             baseStats = listOf(),
             evolutionChain = listOf(),
         )
