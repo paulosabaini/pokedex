@@ -7,6 +7,7 @@ import org.sabaini.pokedex.domain.model.PokemonStat
 import org.sabaini.pokedex.util.Constants
 import org.sabaini.pokedex.util.Enums
 import org.sabaini.pokedex.util.PokemonUtils
+import java.util.Locale
 
 data class PokemonInfoUiState(
     val id: Int = Constants.ZERO,
@@ -28,9 +29,9 @@ data class PokemonInfoUiState(
         return PokemonUtils.getPokemonImageUrl(id.toString())
     }
 
-    fun getFormattedHeight(): String = String.format("%.1f m", height.toFloat() / Constants.TEN)
+    fun getFormattedHeight(): String = String.format(Locale.getDefault(),"%.1f m", height.toFloat() / Constants.TEN)
 
-    fun getFormattedWeight(): String = String.format("%.1f kg", weight.toFloat() / Constants.TEN)
+    fun getFormattedWeight(): String = String.format(Locale.getDefault(),"%.1f kg", weight.toFloat() / Constants.TEN)
 
     fun getBackgroundColor(): Color {
         return backgroundColor ?: Color.Transparent
@@ -69,7 +70,7 @@ fun PokemonInfo.toUiState(): PokemonInfoUiState {
 fun PokemonStat.toUiState(): PokemonInfoStatUiState {
     val statEnum = try {
         Enums.StatType.valueOf(this.name.replace("-", "_").uppercase())
-    } catch (e: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
         Enums.StatType.HP // Default to HP or some other fallback
     }
     return PokemonInfoStatUiState(

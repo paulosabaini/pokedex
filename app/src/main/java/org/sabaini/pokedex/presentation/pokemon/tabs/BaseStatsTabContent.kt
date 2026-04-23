@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,9 +56,12 @@ private fun StatsBar(statName: String, barColor: Color, progressValue: Float) {
 
         Box(contentAlignment = Alignment.Center) {
             LinearProgressIndicator(
-                progress = getPokemonBaseStatValue(progressValue),
+                progress = { getPokemonBaseStatValue(progressValue) },
                 trackColor = Color.DarkGray,
                 color = barColor,
+                drawStopIndicator = {},
+                gapSize = dimensionResource(R.dimen.dimen_of_0_dp),
+                strokeCap = StrokeCap.Square,
                 modifier = Modifier
                     .clip(RoundedCornerShape(dimensionResource(R.dimen.dimen_of_10_dp)))
                     .height(dimensionResource(R.dimen.dimen_of_15_dp))

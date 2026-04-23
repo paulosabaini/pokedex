@@ -41,7 +41,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 pokemonLocalDataSource.fetchPokemons(page).toDomain()
             }.await()
         } else {
-            return pokemonLocalDataSource.fetchPokemons(page).toDomain()
+            pokemonLocalDataSource.fetchPokemons(page).toDomain()
         }
     }
 
@@ -58,7 +58,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 getLocalPokemonInfo(name)
             }.await()
         } else {
-            return getLocalPokemonInfo(name)
+            getLocalPokemonInfo(name)
         }
     }
 

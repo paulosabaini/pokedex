@@ -36,7 +36,7 @@ object AppModule {
             PokemonDatabase::class.java,
             "pokemon_db",
         )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 

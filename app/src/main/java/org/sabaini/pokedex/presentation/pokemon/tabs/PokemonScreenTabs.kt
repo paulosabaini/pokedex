@@ -5,10 +5,9 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -50,15 +49,13 @@ fun PokemonInfoTabs(pokemon: PokemonInfoUiState) {
 private fun TabsOptions(tabs: List<TabItem>, pagerState: PagerState) {
     val scope = rememberCoroutineScope()
 
-    TabRow(
+    PrimaryTabRow(
         selectedTabIndex = pagerState.currentPage,
         containerColor = Black,
         contentColor = Color.White,
-        indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
-                modifier = Modifier.tabIndicatorOffset(
-                    currentTabPosition = tabPositions[pagerState.currentPage],
-                ),
+        indicator = {
+            TabRowDefaults.SecondaryIndicator(
+                modifier = Modifier.tabIndicatorOffset(selectedTabIndex = pagerState.currentPage),
                 color = Color.White,
             )
         },
