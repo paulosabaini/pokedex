@@ -1,6 +1,7 @@
 package org.sabaini.pokedex.presentation.pokedex
 
 import androidx.compose.ui.graphics.Color
+import org.sabaini.pokedex.domain.model.Pokemon
 import org.sabaini.pokedex.util.Constants.ONE
 import org.sabaini.pokedex.util.Constants.SLASH
 import org.sabaini.pokedex.util.PokemonUtils.getDisplayPokemonNumber
@@ -23,4 +24,13 @@ data class PokemonUiState(
     fun getImageUrl(): String {
         return getPokemonImageUrl(getPokemonNumber())
     }
+}
+
+fun Pokemon.toUiState(): PokemonUiState {
+    return PokemonUiState(
+        page = this.page,
+        name = this.name,
+        url = this.url,
+        backgroundColor = this.backgroundColor?.let { Color(it) },
+    )
 }

@@ -1,20 +1,20 @@
-package org.sabaini.pokedex.data
+package org.sabaini.pokedex.data.repository
 
-import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import org.sabaini.pokedex.data.local.PokemonInfoEvolutionLocalModel
 import org.sabaini.pokedex.data.local.PokemonInfoLocalModel
 import org.sabaini.pokedex.data.local.PokemonLocalDataSource
-import org.sabaini.pokedex.data.local.asUiState
+import org.sabaini.pokedex.data.mapper.toDomain
 import org.sabaini.pokedex.data.remote.PokemonInfoApiModel
 import org.sabaini.pokedex.data.remote.PokemonRemoteDataSource
 import org.sabaini.pokedex.data.remote.asLocalModel
 import org.sabaini.pokedex.data.remote.asStatLocalModel
-import org.sabaini.pokedex.presentation.pokemon.PokemonInfoEvolutionUiState
-import org.sabaini.pokedex.presentation.pokemon.PokemonInfoStatUiState
-import org.sabaini.pokedex.presentation.pokemon.PokemonInfoUiState
-import org.sabaini.pokedex.presentation.pokedex.PokemonUiState
+import org.sabaini.pokedex.domain.model.Pokemon
+import org.sabaini.pokedex.domain.model.PokemonEvolution
+import org.sabaini.pokedex.domain.model.PokemonInfo
+import org.sabaini.pokedex.domain.model.PokemonStat
+import org.sabaini.pokedex.domain.repository.PokemonRepository
 import org.sabaini.pokedex.util.Constants.BLANK
 import org.sabaini.pokedex.util.Constants.ENGLISH
 import org.sabaini.pokedex.util.Constants.FIRE_RED
@@ -24,31 +24,31 @@ import org.sabaini.pokedex.util.Constants.ONE
 import org.sabaini.pokedex.util.Constants.SLASH
 import org.sabaini.pokedex.util.Constants.SPACE
 import org.sabaini.pokedex.util.Constants.ZERO
-import org.sabaini.pokedex.util.Enums
 import javax.inject.Inject
 
-class PokemonRepository @Inject constructor(
+class PokemonRepositoryImpl @Inject constructor(
     private val pokemonRemoteDataSource: PokemonRemoteDataSource,
     private val pokemonLocalDataSource: PokemonLocalDataSource,
     private val externalScope: CoroutineScope,
-) {
-    suspend fun getPokemonList(page: Int, refresh: Boolean = false): List<PokemonUiState> {
+) : PokemonRepository {
+
+    override suspend fun getPokemonList(page: Int, refresh: Boolean): List<Pokemon> {
         return if (refresh) {
             externalScope.async {
                 pokemonRemoteDataSource.fetchPokemonList(page = page).also { networkResult ->
                     pokemonLocalDataSource.insertPokemons(networkResult.results.asLocalModel(page = page))
                 }
-                pokemonLocalDataSource.fetchPokemons(page).asUiState()
+                pokemonLocalDataSource.fetchPokemons(page).toDomain()
             }.await()
         } else {
-            return pokemonLocalDataSource.fetchPokemons(page).asUiState()
+            return pokemonLocalDataSource.fetchPokemons(page).toDomain()
         }
     }
 
-    suspend fun getPokemonInfo(
+    override suspend fun getPokemonInfo(
         name: String,
-        refresh: Boolean = false,
-    ): PokemonInfoUiState? {
+        refresh: Boolean,
+    ): PokemonInfo? {
         return if (refresh) {
             externalScope.async {
                 pokemonRemoteDataSource.fetchPokemonInfo(name).also { networkResult ->
@@ -110,44 +110,43 @@ class PokemonRepository @Inject constructor(
         return pokemon
     }
 
-    private suspend fun getLocalPokemonInfo(name: String): PokemonInfoUiState? {
+    private suspend fun getLocalPokemonInfo(name: String): PokemonInfo? {
         val pokemonInfo = pokemonLocalDataSource.fetchPokemonInfoByName(name)
-        return pokemonInfo?.let {
-            val pokedexPokemon = pokemonLocalDataSource.fetchPokemon(pokemonInfo.name)
-            pokemonInfo.asUiState()
-                .copy(
-                    evolutionChain = getEvolutionChain(pokemonInfo.evolutionChainId.toInt()),
-                    baseStats = getBaseStats(pokemonInfo.id),
-                    backgroundColor = pokedexPokemon.backgroundColor?.let { color -> Color(color) },
-                )
+        return pokemonInfo?.toDomain()?.let { domainInfo ->
+            val pokedexPokemon = pokemonLocalDataSource.fetchPokemon(name)
+            domainInfo.copy(
+                evolutionChain = getEvolutionChain(pokemonInfo.evolutionChainId.toInt()),
+                baseStats = getBaseStats(pokemonInfo.id),
+                backgroundColor = pokedexPokemon.backgroundColor,
+            )
         }
     }
 
-    private suspend fun getEvolutionChain(evolutionChainId: Int): List<PokemonInfoEvolutionUiState> {
+    private suspend fun getEvolutionChain(evolutionChainId: Int): List<PokemonEvolution> {
         val pokemonEvolutions =
             pokemonLocalDataSource.fetchPokemonInfoEvolution(evolutionChainId)
-        return pokemonEvolutions.map {
-            val pokemon = pokemonLocalDataSource.fetchPokemonInfo(it.idPokemon)
-            PokemonInfoEvolutionUiState(
-                pokemon = pokemon.asUiState(),
-                minLevel = it.minLevel,
-            )
+        return pokemonEvolutions.mapNotNull { evolutionLocal ->
+            val pokemon = pokemonLocalDataSource.fetchPokemonInfo(evolutionLocal.idPokemon)
+            pokemon.toDomain()?.let { domainPokemon ->
+                PokemonEvolution(
+                    pokemon = domainPokemon,
+                    minLevel = evolutionLocal.minLevel,
+                )
+            }
         }
     }
 
-    private suspend fun getBaseStats(id: Int): List<PokemonInfoStatUiState> {
+    private suspend fun getBaseStats(id: Int): List<PokemonStat> {
         val pokemonStats = pokemonLocalDataSource.fetchPokemonInfoStat(id)
         return pokemonStats.map {
-            val statEnum = Enums.StatType.valueOf(it.name.replace("-", "_").uppercase())
-            PokemonInfoStatUiState(
-                name = statEnum.stat,
-                baseState = it.baseState / 100f,
-                color = statEnum.color,
+            PokemonStat(
+                name = it.name,
+                baseState = it.baseState,
             )
         }
     }
 
-    suspend fun updatePokemonBackgroundColor(name: String, color: Int?) {
+    override suspend fun updatePokemonBackgroundColor(name: String, color: Int?) {
         pokemonLocalDataSource.updatePokemonBackgroundColor(name, color)
     }
 }

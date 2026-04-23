@@ -1,7 +1,11 @@
 package org.sabaini.pokedex.presentation.pokemon
 
 import androidx.compose.ui.graphics.Color
+import org.sabaini.pokedex.domain.model.PokemonEvolution
+import org.sabaini.pokedex.domain.model.PokemonInfo
+import org.sabaini.pokedex.domain.model.PokemonStat
 import org.sabaini.pokedex.util.Constants
+import org.sabaini.pokedex.util.Enums
 import org.sabaini.pokedex.util.PokemonUtils
 
 data class PokemonInfoUiState(
@@ -47,3 +51,37 @@ data class PokemonInfoEvolutionUiState(
     val pokemon: PokemonInfoUiState,
     val minLevel: Int,
 )
+
+fun PokemonInfo.toUiState(): PokemonInfoUiState {
+    return PokemonInfoUiState(
+        id = this.id,
+        name = this.name,
+        types = this.types,
+        description = this.description,
+        height = this.height,
+        weight = this.weight,
+        backgroundColor = this.backgroundColor?.let { Color(it) },
+        baseStats = this.baseStats.map { it.toUiState() },
+        evolutionChain = this.evolutionChain.map { it.toUiState() },
+    )
+}
+
+fun PokemonStat.toUiState(): PokemonInfoStatUiState {
+    val statEnum = try {
+        Enums.StatType.valueOf(this.name.replace("-", "_").uppercase())
+    } catch (e: IllegalArgumentException) {
+        Enums.StatType.HP // Default to HP or some other fallback
+    }
+    return PokemonInfoStatUiState(
+        name = statEnum.stat,
+        baseState = this.baseState / 100f,
+        color = statEnum.color,
+    )
+}
+
+fun PokemonEvolution.toUiState(): PokemonInfoEvolutionUiState {
+    return PokemonInfoEvolutionUiState(
+        pokemon = this.pokemon.toUiState(),
+        minLevel = this.minLevel,
+    )
+}

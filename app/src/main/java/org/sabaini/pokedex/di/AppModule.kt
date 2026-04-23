@@ -11,13 +11,14 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.sabaini.pokedex.data.PokemonRepository
 import org.sabaini.pokedex.data.local.PokemonDao
 import org.sabaini.pokedex.data.local.PokemonDatabase
 import org.sabaini.pokedex.data.local.PokemonInfoDao
 import org.sabaini.pokedex.data.local.PokemonLocalDataSource
 import org.sabaini.pokedex.data.remote.PokemonApi
 import org.sabaini.pokedex.data.remote.PokemonRemoteDataSource
+import org.sabaini.pokedex.data.repository.PokemonRepositoryImpl
+import org.sabaini.pokedex.domain.repository.PokemonRepository
 import org.sabaini.pokedex.util.Constants.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -66,7 +67,7 @@ object AppModule {
         pokemonLocalDataSource: PokemonLocalDataSource,
         externalScope: CoroutineScope,
     ): PokemonRepository {
-        return PokemonRepository(pokemonRemoteDataSource, pokemonLocalDataSource, externalScope)
+        return PokemonRepositoryImpl(pokemonRemoteDataSource, pokemonLocalDataSource, externalScope)
     }
 
     @Singleton
