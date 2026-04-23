@@ -2,10 +2,12 @@ package org.sabaini.pokedex.presentation.pokedex
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -84,33 +86,36 @@ private fun PokemonCardImage(
 ) {
     var showLoading by remember { mutableStateOf(true) }
 
-    AsyncImage(
-        model = pokemonImageUrl,
-        contentDescription = pokemonName,
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = dimensionResource(R.dimen.dimen_of_30_dp)),
-        onState = { painterState ->
-            showLoading = when (painterState) {
-                is AsyncImagePainter.State.Loading -> true
-                is AsyncImagePainter.State.Empty -> true
-                is AsyncImagePainter.State.Error -> true
-                is AsyncImagePainter.State.Success -> {
-                    ColorUtils.calculateDominantColor(painterState.result.drawable) {
-                        onCalculateDominantColor(it)
+        contentAlignment = Alignment.Center,
+    ) {
+        AsyncImage(
+            model = pokemonImageUrl,
+            contentDescription = pokemonName,
+            modifier = Modifier.fillMaxSize(),
+            onState = { painterState ->
+                showLoading = when (painterState) {
+                    is AsyncImagePainter.State.Loading -> true
+                    is AsyncImagePainter.State.Empty -> true
+                    is AsyncImagePainter.State.Error -> true
+                    is AsyncImagePainter.State.Success -> {
+                        ColorUtils.calculateDominantColor(painterState.result.drawable) {
+                            onCalculateDominantColor(it)
+                        }
+                        false
                     }
-                    false
                 }
-            }
-        },
-    )
-
-    if (showLoading) {
-        CircularProgressIndicator(
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = dimensionResource(R.dimen.dimen_of_30_dp)),
+            },
         )
+
+        if (showLoading) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(dimensionResource(R.dimen.dimen_of_48_dp)),
+            )
+        }
     }
 }

@@ -11,6 +11,7 @@
     <dimen name="dimen_of_15_dp">15dp</dimen>
     <dimen name="dimen_of_16_dp">16dp</dimen>
     <dimen name="dimen_of_30_dp">30dp</dimen>
+    <dimen name="dimen_of_48_dp">48dp</dimen>
     <dimen name="dimen_of_64_dp">64dp</dimen>
     <dimen name="dimen_of_80_dp">80dp</dimen>
     <dimen name="dimen_of_150_dp">150dp</dimen>

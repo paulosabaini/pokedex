@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -39,7 +40,8 @@ fun LoadingItem() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.dimen_of_16_dp))
-            .wrapContentWidth(Alignment.CenterHorizontally),
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .size(dimensionResource(R.dimen.dimen_of_48_dp)),
     )
 }
 

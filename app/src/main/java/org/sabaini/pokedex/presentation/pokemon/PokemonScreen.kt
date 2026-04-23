@@ -69,7 +69,7 @@ private fun PokemonInfoLoading() {
         CircularProgressIndicator(
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .size(dimensionResource(R.dimen.dimen_of_64_dp))
+                .size(dimensionResource(R.dimen.dimen_of_48_dp))
                 .padding(bottom = dimensionResource(R.dimen.dimen_of_10_dp)),
         )
     }
