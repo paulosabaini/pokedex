@@ -3,12 +3,17 @@ package org.sabaini.pokedex.presentation.pokedex
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -74,10 +79,19 @@ fun ErrorItem(
 @Composable
 fun EmptySearchState(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(dimensionResource(R.dimen.dimen_of_16_dp)),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.dimen_of_16_dp)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Icon(
+            imageVector = Icons.Default.SearchOff,
+            contentDescription = null,
+            modifier = Modifier.size(dimensionResource(R.dimen.dimen_of_80_dp)),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dimen_of_16_dp)))
         Text(
             text = stringResource(R.string.no_pokemon_found),
             style = MaterialTheme.typography.bodyLarge,

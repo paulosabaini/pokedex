@@ -25,37 +25,31 @@ fun PokemonList(
     onClickPokemon: (String) -> Unit,
     onBackgroundColorChange: (String, Color) -> Unit,
 ) {
-    LazyVerticalGrid(
-        modifier = modifier,
-        columns = GridCells.Adaptive(minSize = dimensionResource(R.dimen.dimen_of_150_dp)),
-        contentPadding = PaddingValues(8.dp),
-    ) {
-        items(
-            count = pokemons.itemCount,
-            key = { index -> pokemons[index]?.name ?: index },
-        ) { index ->
-            pokemons[index]?.let {
-                PokemonCard(
-                    pokemon = it,
-                    onCalculateDominantColor = { color ->
-                        onBackgroundColorChange(it.name, color)
-                    },
-                    onItemClicked = onClickPokemon,
-                )
+    if (pokemons.loadState.refresh is LoadState.Loading) {
+        LoadingView(modifier.fillMaxSize())
+    } else if (pokemons.itemCount == 0 && pokemons.loadState.refresh is LoadState.NotLoading) {
+        EmptySearchState(modifier.fillMaxSize())
+    } else {
+        LazyVerticalGrid(
+            modifier = modifier,
+            columns = GridCells.Adaptive(minSize = dimensionResource(R.dimen.dimen_of_150_dp)),
+            contentPadding = PaddingValues(8.dp),
+        ) {
+            items(
+                count = pokemons.itemCount,
+                key = { index -> pokemons[index]?.name ?: index },
+            ) { index ->
+                pokemons[index]?.let {
+                    PokemonCard(
+                        pokemon = it,
+                        onCalculateDominantColor = { color ->
+                            onBackgroundColorChange(it.name, color)
+                        },
+                        onItemClicked = onClickPokemon,
+                    )
+                }
             }
-        }
-        renderLoading(pokemons)
-        renderEmptyState(pokemons)
-    }
-}
-
-private fun LazyGridScope.renderEmptyState(pokemons: LazyPagingItems<PokemonUiState>) {
-    val isRefreshNotLoading = pokemons.loadState.refresh is LoadState.NotLoading
-    val isEmpty = pokemons.itemCount == 0
-
-    if (isRefreshNotLoading && isEmpty) {
-        item(span = { GridItemSpan(Constants.SPAN_OVER_SIZED) }) {
-            EmptySearchState(Modifier.fillMaxSize())
+            renderLoading(pokemons)
         }
     }
 }
