@@ -11,4 +11,5 @@
     <string name="back">Back</string>
     <string name="loading_error">Ops… Something went wrong while trying to fetch the pokemon info. Please try again.</string>
     <string name="no_pokemon_found">Even Mewtwo couldn\'t find that Pokemon. Are you sure it exists?</string>
+    <string name="search_pokemon">Search Pokemon</string>
 </resources>
