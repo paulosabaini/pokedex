@@ -64,4 +64,9 @@ class PokemonLocalDataSource @Inject constructor(
             pokemonDao.updateBackgroundColor(name, color)
         }
     }
+
+    suspend fun searchPokemons(query: String): List<PokemonLocalModel> =
+        withContext(ioDispatcher) {
+            pokemonDao.searchPokemons(query)
+        }
 }

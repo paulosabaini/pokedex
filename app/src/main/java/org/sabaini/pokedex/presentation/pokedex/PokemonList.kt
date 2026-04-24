@@ -45,6 +45,18 @@ fun PokemonList(
             }
         }
         renderLoading(pokemons)
+        renderEmptyState(pokemons)
+    }
+}
+
+private fun LazyGridScope.renderEmptyState(pokemons: LazyPagingItems<PokemonUiState>) {
+    val isRefreshNotLoading = pokemons.loadState.refresh is LoadState.NotLoading
+    val isEmpty = pokemons.itemCount == 0
+
+    if (isRefreshNotLoading && isEmpty) {
+        item(span = { GridItemSpan(Constants.SPAN_OVER_SIZED) }) {
+            EmptySearchState(Modifier.fillMaxSize())
+        }
     }
 }
 

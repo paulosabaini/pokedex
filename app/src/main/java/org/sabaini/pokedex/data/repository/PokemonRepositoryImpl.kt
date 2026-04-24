@@ -5,6 +5,7 @@ import kotlinx.coroutines.async
 import org.sabaini.pokedex.data.local.PokemonInfoEvolutionLocalModel
 import org.sabaini.pokedex.data.local.PokemonInfoLocalModel
 import org.sabaini.pokedex.data.local.PokemonLocalDataSource
+import org.sabaini.pokedex.data.local.PokemonLocalModel
 import org.sabaini.pokedex.data.mapper.toDomain
 import org.sabaini.pokedex.data.remote.PokemonInfoApiModel
 import org.sabaini.pokedex.data.remote.PokemonRemoteDataSource
@@ -15,6 +16,7 @@ import org.sabaini.pokedex.domain.model.PokemonEvolution
 import org.sabaini.pokedex.domain.model.PokemonInfo
 import org.sabaini.pokedex.domain.model.PokemonStat
 import org.sabaini.pokedex.domain.repository.PokemonRepository
+import org.sabaini.pokedex.util.Constants
 import org.sabaini.pokedex.util.Constants.BLANK
 import org.sabaini.pokedex.util.Constants.ENGLISH
 import org.sabaini.pokedex.util.Constants.FIRE_RED
@@ -148,5 +150,25 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override suspend fun updatePokemonBackgroundColor(name: String, color: Int?) {
         pokemonLocalDataSource.updatePokemonBackgroundColor(name, color)
+    }
+
+    override suspend fun searchPokemon(query: String): List<Pokemon> {
+        val localResults = pokemonLocalDataSource.searchPokemons(query)
+        return if (localResults.isNotEmpty()) {
+            localResults.toDomain()
+        } else {
+            try {
+                val networkResult = pokemonRemoteDataSource.fetchPokemonInfo(query.lowercase())
+                val pokemonLocal = PokemonLocalModel(
+                    name = networkResult.name,
+                    url = "${Constants.BASE_URL}pokemon/${networkResult.id}/",
+                    page = MINUS_ONE,
+                )
+                pokemonLocalDataSource.insertPokemons(listOf(pokemonLocal))
+                listOf(pokemonLocal.toDomain())
+            } catch (_: Exception) {
+                emptyList()
+            }
+        }
     }
 }

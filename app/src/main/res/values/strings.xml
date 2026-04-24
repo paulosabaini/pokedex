@@ -10,4 +10,5 @@
     <string name="retry">Retry</string>
     <string name="back">Back</string>
     <string name="loading_error">Ops… Something went wrong while trying to fetch the pokemon info. Please try again.</string>
+    <string name="no_pokemon_found">No pokemon found with this name.</string>
 </resources>

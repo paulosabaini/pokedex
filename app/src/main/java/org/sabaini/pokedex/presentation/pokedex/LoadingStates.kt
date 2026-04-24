@@ -71,6 +71,22 @@ fun ErrorItem(
     }
 }
 
+@Composable
+fun EmptySearchState(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth().padding(dimensionResource(R.dimen.dimen_of_16_dp)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.no_pokemon_found),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun LoadingViewPreview() {

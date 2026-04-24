@@ -25,4 +25,7 @@ interface PokemonDao {
 
     @Query("select * from PokemonLocalModel where name = :name")
     fun getPokemon(name: String): PokemonLocalModel
+
+    @Query("SELECT * FROM PokemonLocalModel WHERE name LIKE '%' || LOWER(:query) || '%'")
+    fun searchPokemons(query: String): List<PokemonLocalModel>
 }

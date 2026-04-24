@@ -7,4 +7,5 @@ interface PokemonRepository {
     suspend fun getPokemonList(page: Int, refresh: Boolean = false): List<Pokemon>
     suspend fun getPokemonInfo(name: String, refresh: Boolean = false): PokemonInfo?
     suspend fun updatePokemonBackgroundColor(name: String, color: Int?)
+    suspend fun searchPokemon(query: String): List<Pokemon>
 }
