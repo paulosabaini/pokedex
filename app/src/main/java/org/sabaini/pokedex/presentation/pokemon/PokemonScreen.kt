@@ -31,6 +31,7 @@ import org.sabaini.pokedex.R
 import org.sabaini.pokedex.presentation.pokemon.tabs.PokemonInfoTabs
 import org.sabaini.pokedex.presentation.theme.LightGray
 import org.sabaini.pokedex.presentation.theme.Red
+import org.sabaini.pokedex.util.getContentColor
 import org.sabaini.pokedex.util.toTitleCase
 
 @Composable
@@ -89,7 +90,7 @@ private fun PokemonInfoError() {
         )
         Text(
             text = stringResource(R.string.loading_error),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
         )
     }
@@ -109,6 +110,7 @@ private fun PokemonInfo(
             PokemonNameAndNumber(
                 pokemonName = pokemon.name,
                 pokemonNumber = pokemon.getFormattedPokemonNumber(),
+                backgroundColor = pokemon.backgroundColor ?: LightGray,
             )
             PokemonTypes(types = pokemon.types)
             PokemonInfoImage(
@@ -121,7 +123,8 @@ private fun PokemonInfo(
 }
 
 @Composable
-private fun PokemonNameAndNumber(pokemonName: String, pokemonNumber: String) {
+private fun PokemonNameAndNumber(pokemonName: String, pokemonNumber: String, backgroundColor: Color) {
+    val contentColor = backgroundColor.getContentColor()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -131,13 +134,13 @@ private fun PokemonNameAndNumber(pokemonName: String, pokemonNumber: String) {
     ) {
         Text(
             text = pokemonName.toTitleCase(),
-            color = Color.White,
+            color = contentColor,
             fontWeight = FontWeight.Bold,
             fontSize = dimensionResource(R.dimen.dimen_of_35_sp).value.sp,
         )
         Text(
             text = pokemonNumber,
-            color = Color.White,
+            color = contentColor,
             fontSize = dimensionResource(R.dimen.dimen_of_25_sp).value.sp,
             fontWeight = FontWeight.Bold,
         )

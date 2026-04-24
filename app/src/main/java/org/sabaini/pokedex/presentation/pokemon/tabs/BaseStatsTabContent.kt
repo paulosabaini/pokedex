@@ -12,29 +12,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.sabaini.pokedex.R
 import org.sabaini.pokedex.presentation.pokemon.PokemonInfoUiState
-import org.sabaini.pokedex.presentation.theme.Black
 import org.sabaini.pokedex.util.PokemonUtils.getPokemonBaseStatValue
 import org.sabaini.pokedex.util.PokemonUtils.getPokemonBaseStatePercentage
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun BaseStatsContent(pokemon: PokemonInfoUiState) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Black)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(dimensionResource(R.dimen.dimen_of_15_dp)),
     ) {
         pokemon.baseStats.forEach {
@@ -52,12 +52,12 @@ private fun StatsBar(statName: String, barColor: Color, progressValue: Float) {
             .padding(top = dimensionResource(R.dimen.dimen_of_10_dp))
             .fillMaxWidth(),
     ) {
-        Text(text = statName, color = Color.White)
+        Text(text = statName, color = MaterialTheme.colorScheme.onSurface)
 
         Box(contentAlignment = Alignment.Center) {
             LinearProgressIndicator(
                 progress = { getPokemonBaseStatValue(progressValue) },
-                trackColor = Color.DarkGray,
+                trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                 color = barColor,
                 drawStopIndicator = {},
                 gapSize = dimensionResource(R.dimen.dimen_of_0_dp),
@@ -73,7 +73,7 @@ private fun StatsBar(statName: String, barColor: Color, progressValue: Float) {
                     R.string.stat_value,
                     getPokemonBaseStatePercentage(progressValue),
                 ),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
@@ -82,7 +82,7 @@ private fun StatsBar(statName: String, barColor: Color, progressValue: Float) {
 @Preview
 @Composable
 private fun StatsBarPreview() {
-    Surface(color = Black) {
+    Surface(color = MaterialTheme.colorScheme.surface) {
         StatsBar("EXP", Color.Red, 0.5f)
     }
 }

@@ -4,7 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.palette.graphics.Palette
+
+fun Color.getContentColor(): Color {
+    return if (this.luminance() > 0.5f) Color.Black else Color.White
+}
 
 object ColorUtils {
 

@@ -29,6 +29,7 @@ import coil.request.ImageRequest
 import org.sabaini.pokedex.R
 import org.sabaini.pokedex.presentation.theme.LightGray
 import org.sabaini.pokedex.util.ColorUtils
+import org.sabaini.pokedex.util.getContentColor
 import org.sabaini.pokedex.util.toTitleCase
 
 @Composable
@@ -49,7 +50,7 @@ fun PokemonCard(
             .padding(dimensionResource(R.dimen.dimen_of_5_dp))
             .size(dimensionResource(R.dimen.dimen_of_150_dp)),
     ) {
-        PokemonCardHeader(pokemon)
+        PokemonCardHeader(pokemon, containerColor)
         PokemonCardImage(
             pokemonName = pokemon.name,
             pokemonImageUrl = pokemon.getImageUrl(),
@@ -63,7 +64,8 @@ fun PokemonCard(
 }
 
 @Composable
-private fun PokemonCardHeader(pokemon: PokemonUiState) {
+private fun PokemonCardHeader(pokemon: PokemonUiState, containerColor: Color) {
+    val contentColor = containerColor.getContentColor()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -72,12 +74,12 @@ private fun PokemonCardHeader(pokemon: PokemonUiState) {
     ) {
         Text(
             text = pokemon.name.toTitleCase(),
-            color = Color.White,
+            color = contentColor,
             fontWeight = FontWeight.Bold,
         )
         Text(
             text = pokemon.getFormattedPokemonNumber(),
-            color = Color.White,
+            color = contentColor,
         )
     }
 }

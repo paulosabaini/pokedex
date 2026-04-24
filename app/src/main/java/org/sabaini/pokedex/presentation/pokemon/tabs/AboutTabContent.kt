@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -21,20 +21,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import org.sabaini.pokedex.R
 import org.sabaini.pokedex.presentation.pokemon.PokemonInfoUiState
-import org.sabaini.pokedex.presentation.theme.Black
-import org.sabaini.pokedex.presentation.theme.LightGray
 
 @Composable
 fun AboutContent(pokemon: PokemonInfoUiState) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Black)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(dimensionResource(R.dimen.dimen_of_15_dp)),
     ) {
         Text(
             text = pokemon.description,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Justify,
             fontSize = dimensionResource(R.dimen.dimen_of_16_sp).value.sp,
         )
@@ -49,7 +47,10 @@ fun AboutContent(pokemon: PokemonInfoUiState) {
 @Composable
 private fun HeightAndWeightCard(height: String, weight: String) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.dimen_of_3_dp)),
         modifier = Modifier
             .padding(
@@ -71,8 +72,8 @@ private fun HeightAndWeightText(title: String, value: String) {
         modifier = Modifier.padding(dimensionResource(R.dimen.dimen_of_10_dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = title, color = LightGray)
-        Text(text = value, color = Color.Black)
+        Text(text = title, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f))
+        Text(text = value, color = MaterialTheme.colorScheme.onPrimaryContainer)
     }
 }
 

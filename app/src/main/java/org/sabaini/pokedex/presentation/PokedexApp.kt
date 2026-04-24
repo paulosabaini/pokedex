@@ -36,6 +36,7 @@ import org.sabaini.pokedex.presentation.Destinations.POKEMON_SCREEN_ARGUMENT
 import org.sabaini.pokedex.presentation.pokedex.PokedexScreen
 import org.sabaini.pokedex.presentation.pokemon.PokemonScreen
 import org.sabaini.pokedex.presentation.theme.PokedexTheme
+import org.sabaini.pokedex.util.getContentColor
 
 @Composable
 @ExperimentalFoundationApi
@@ -91,12 +92,13 @@ fun PokedexTopBar(
     onNavigateUp: () -> Unit,
 ) {
     if (upAvailable.value) {
+        val contentColor = customTopAppBarColor.getContentColor()
         TopAppBar(
             title = {
                 Text(
                     text = stringResource(R.string.pokedex),
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = contentColor,
                 )
             },
             navigationIcon = {
@@ -104,7 +106,7 @@ fun PokedexTopBar(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back),
-                        tint = Color.White,
+                        tint = contentColor,
                     )
                 }
             },
@@ -118,7 +120,7 @@ fun PokedexTopBar(
                 Text(
                     text = stringResource(R.string.pokedex),
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.padding(dimensionResource(R.dimen.dimen_of_5_dp)),
                 )
             },

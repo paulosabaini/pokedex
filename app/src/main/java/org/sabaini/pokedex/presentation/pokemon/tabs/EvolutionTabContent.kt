@@ -14,11 +14,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,7 +27,6 @@ import coil.compose.AsyncImage
 import org.sabaini.pokedex.R
 import org.sabaini.pokedex.presentation.pokemon.PokemonType
 import org.sabaini.pokedex.presentation.pokemon.PokemonInfoUiState
-import org.sabaini.pokedex.presentation.theme.Black
 import org.sabaini.pokedex.util.Constants
 import org.sabaini.pokedex.util.toTitleCase
 
@@ -36,7 +35,7 @@ fun EvolutionContent(pokemon: PokemonInfoUiState) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Black)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(dimensionResource(R.dimen.dimen_of_15_dp)),
     ) {
         LazyColumn(
@@ -70,11 +69,11 @@ private fun EvolutionArrow(minLevel: String) {
         Icon(
             Icons.Filled.ArrowDownward,
             contentDescription = stringResource(R.string.arrow),
-            tint = Color.White,
+            tint = MaterialTheme.colorScheme.onSurface,
         )
         Text(
             text = stringResource(R.string.level_value, minLevel),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = dimensionResource(R.dimen.dimen_of_12_sp).value.sp,
         )
     }
@@ -108,8 +107,12 @@ private fun PokemonEvolutionImage(
 @Composable
 private fun PokemonEvolutionNameAndTypes(pokemon: PokemonInfoUiState) {
     Column {
-        Text(text = pokemon.getFormattedPokemonNumber(), color = Color.White)
-        Text(text = pokemon.name.toTitleCase(), color = Color.White, fontWeight = FontWeight.Bold)
+        Text(text = pokemon.getFormattedPokemonNumber(), color = MaterialTheme.colorScheme.onSurface)
+        Text(
+            text = pokemon.name.toTitleCase(),
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Bold,
+        )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dimen_of_4_dp)))
         Row {
             pokemon.types.forEach { type ->

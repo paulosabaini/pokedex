@@ -5,6 +5,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
@@ -13,13 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.sabaini.pokedex.R
 import org.sabaini.pokedex.presentation.pokemon.PokemonInfoUiState
-import org.sabaini.pokedex.presentation.theme.Black
 import org.sabaini.pokedex.util.Constants
 
 @Composable
@@ -51,12 +50,12 @@ private fun TabsOptions(tabs: List<TabItem>, pagerState: PagerState) {
 
     PrimaryTabRow(
         selectedTabIndex = pagerState.currentPage,
-        containerColor = Black,
-        contentColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface,
         indicator = {
             TabRowDefaults.SecondaryIndicator(
                 modifier = Modifier.tabIndicatorOffset(selectedTabIndex = pagerState.currentPage),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onSurface,
             )
         },
     ) {
