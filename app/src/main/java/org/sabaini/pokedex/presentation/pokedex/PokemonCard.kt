@@ -38,7 +38,9 @@ fun PokemonCard(
     onCalculateDominantColor: (Color) -> Unit,
     onItemClicked: (String) -> Unit,
 ) {
-    val containerColor = pokemon.backgroundColor ?: LightGray
+    var containerColor by remember(pokemon.name) {
+        mutableStateOf(pokemon.backgroundColor ?: LightGray)
+    }
 
     Card(
         onClick = { onItemClicked(pokemon.name) },
@@ -52,7 +54,10 @@ fun PokemonCard(
             pokemonName = pokemon.name,
             pokemonImageUrl = pokemon.getImageUrl(),
             backgroundColor = pokemon.backgroundColor,
-            onCalculateDominantColor = onCalculateDominantColor,
+            onCalculateDominantColor = { color ->
+                containerColor = color
+                onCalculateDominantColor(color)
+            },
         )
     }
 }
