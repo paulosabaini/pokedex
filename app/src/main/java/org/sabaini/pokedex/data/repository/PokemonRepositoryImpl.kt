@@ -118,11 +118,15 @@ class PokemonRepositoryImpl @Inject constructor(
     private suspend fun getLocalPokemonInfo(name: String): PokemonInfo? {
         val pokemonInfo = pokemonLocalDataSource.fetchPokemonInfoByName(name)
         return pokemonInfo?.toDomain()?.let { domainInfo ->
-            val pokedexPokemon = pokemonLocalDataSource.fetchPokemon(name)
+            val pokedexPokemon = try {
+                pokemonLocalDataSource.fetchPokemon(name)
+            } catch (_: Exception) {
+                null
+            }
             domainInfo.copy(
                 evolutionChain = getEvolutionChain(pokemonInfo.evolutionChainId.toInt()),
                 baseStats = getBaseStats(pokemonInfo.id),
-                backgroundColor = pokedexPokemon.backgroundColor,
+                backgroundColor = pokedexPokemon?.backgroundColor,
             )
         }
     }
@@ -200,13 +204,15 @@ class PokemonRepositoryImpl @Inject constructor(
     override suspend fun getPokemonByGeneration(generationName: String): List<Pokemon> {
         return try {
             val generationDetail = pokemonRemoteDataSource.fetchGenerationDetail(generationName)
-            generationDetail.pokemonSpecies.map { species ->
-                Pokemon(
+            val pokemonLocals = generationDetail.pokemonSpecies.map { species ->
+                PokemonLocalModel(
                     name = species.name,
                     url = species.url.replace("-species", ""),
                     page = MINUS_ONE
                 )
             }
+            pokemonLocalDataSource.insertPokemons(pokemonLocals)
+            pokemonLocals.toDomain()
         } catch (_: Exception) {
             emptyList()
         }
