@@ -69,4 +69,14 @@ class PokemonLocalDataSource @Inject constructor(
         withContext(ioDispatcher) {
             pokemonDao.searchPokemons(query)
         }
+
+    suspend fun fetchGenerations(): List<GenerationLocalModel> =
+        withContext(ioDispatcher) {
+            pokemonDao.loadGenerations()
+        }
+
+    suspend fun insertGenerations(generations: List<GenerationLocalModel>) =
+        withContext(ioDispatcher) {
+            pokemonDao.saveGenerations(generations)
+        }
 }

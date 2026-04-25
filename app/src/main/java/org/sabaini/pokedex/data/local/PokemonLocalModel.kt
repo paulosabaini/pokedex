@@ -38,3 +38,11 @@ data class PokemonInfoEvolutionLocalModel(
     val idPokemon: Int,
     val minLevel: Int,
 )
+
+@Entity
+data class GenerationLocalModel(
+    @PrimaryKey
+    val name: String,
+    val url: String,
+    val displayName: String
+)

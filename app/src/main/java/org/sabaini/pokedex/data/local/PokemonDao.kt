@@ -28,4 +28,10 @@ interface PokemonDao {
 
     @Query("SELECT * FROM PokemonLocalModel WHERE name LIKE '%' || LOWER(:query) || '%'")
     fun searchPokemons(query: String): List<PokemonLocalModel>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun saveGenerations(generations: List<GenerationLocalModel>)
+
+    @Query("SELECT * FROM GenerationLocalModel")
+    fun loadGenerations(): List<GenerationLocalModel>
 }

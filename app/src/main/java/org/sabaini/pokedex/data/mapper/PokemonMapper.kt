@@ -1,7 +1,9 @@
 package org.sabaini.pokedex.data.mapper
 
+import org.sabaini.pokedex.data.local.GenerationLocalModel
 import org.sabaini.pokedex.data.local.PokemonInfoLocalModel
 import org.sabaini.pokedex.data.local.PokemonLocalModel
+import org.sabaini.pokedex.domain.model.Generation
 import org.sabaini.pokedex.domain.model.Pokemon
 import org.sabaini.pokedex.domain.model.PokemonInfo
 import org.sabaini.pokedex.util.Constants.COMMA
@@ -32,3 +34,13 @@ fun PokemonInfoLocalModel?.toDomain(backgroundColor: Int? = null): PokemonInfo? 
         )
     }
 }
+
+fun GenerationLocalModel.toDomain(): Generation {
+    return Generation(
+        name = this.name,
+        url = this.url,
+        displayName = this.displayName
+    )
+}
+
+fun List<GenerationLocalModel>.toGenerationDomain(): List<Generation> = map { it.toDomain() }

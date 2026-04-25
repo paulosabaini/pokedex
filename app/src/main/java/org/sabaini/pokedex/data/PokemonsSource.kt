@@ -3,6 +3,7 @@ package org.sabaini.pokedex.data
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import org.sabaini.pokedex.domain.model.Pokemon
+import org.sabaini.pokedex.domain.repository.PokemonRepository
 import org.sabaini.pokedex.domain.usecase.GetPokemonListUseCase
 import org.sabaini.pokedex.domain.usecase.SearchPokemonUseCase
 import org.sabaini.pokedex.util.Constants.ONE
@@ -12,16 +13,19 @@ import javax.inject.Inject
 class PokemonsSource(
     private val getPokemonListUseCase: GetPokemonListUseCase,
     private val searchPokemonUseCase: SearchPokemonUseCase,
+    private val repository: PokemonRepository,
     private val query: String? = null,
+    private val generationName: String? = null,
 ) :
     PagingSource<Int, Pokemon>() {
 
     class Factory @Inject constructor(
         private val getPokemonListUseCase: GetPokemonListUseCase,
         private val searchPokemonUseCase: SearchPokemonUseCase,
+        private val repository: PokemonRepository,
     ) {
-        fun create(query: String? = null): PokemonsSource {
-            return PokemonsSource(getPokemonListUseCase, searchPokemonUseCase, query)
+        fun create(query: String? = null, generationName: String? = null): PokemonsSource {
+            return PokemonsSource(getPokemonListUseCase, searchPokemonUseCase, repository, query, generationName)
         }
     }
 
@@ -29,6 +33,13 @@ class PokemonsSource(
         return try {
             if (!query.isNullOrBlank()) {
                 val pokemons = searchPokemonUseCase(query)
+                LoadResult.Page(
+                    data = pokemons,
+                    prevKey = null,
+                    nextKey = null,
+                )
+            } else if (!generationName.isNullOrBlank()) {
+                val pokemons = repository.getPokemonByGeneration(generationName)
                 LoadResult.Page(
                     data = pokemons,
                     prevKey = null,

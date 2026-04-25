@@ -21,4 +21,10 @@ interface PokemonApi {
 
     @GET("evolution-chain/{id}")
     suspend fun fetchPokemonInfoEvolutions(@Path("id") id: String): PokemonInfoEvolutionApiModel
+
+    @GET("generation")
+    suspend fun fetchGenerationList(): GenerationListApiModel
+
+    @GET("generation/{name}")
+    suspend fun fetchGenerationDetail(@Path("name") name: String): GenerationDetailApiModel
 }

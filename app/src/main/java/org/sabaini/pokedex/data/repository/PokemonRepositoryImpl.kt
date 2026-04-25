@@ -2,15 +2,18 @@ package org.sabaini.pokedex.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import org.sabaini.pokedex.data.local.GenerationLocalModel
 import org.sabaini.pokedex.data.local.PokemonInfoEvolutionLocalModel
 import org.sabaini.pokedex.data.local.PokemonInfoLocalModel
 import org.sabaini.pokedex.data.local.PokemonLocalDataSource
 import org.sabaini.pokedex.data.local.PokemonLocalModel
 import org.sabaini.pokedex.data.mapper.toDomain
+import org.sabaini.pokedex.data.mapper.toGenerationDomain
 import org.sabaini.pokedex.data.remote.PokemonInfoApiModel
 import org.sabaini.pokedex.data.remote.PokemonRemoteDataSource
 import org.sabaini.pokedex.data.remote.asLocalModel
 import org.sabaini.pokedex.data.remote.asStatLocalModel
+import org.sabaini.pokedex.domain.model.Generation
 import org.sabaini.pokedex.domain.model.Pokemon
 import org.sabaini.pokedex.domain.model.PokemonEvolution
 import org.sabaini.pokedex.domain.model.PokemonInfo
@@ -169,6 +172,43 @@ class PokemonRepositoryImpl @Inject constructor(
             } catch (_: Exception) {
                 emptyList()
             }
+        }
+    }
+
+    override suspend fun getGenerations(): List<Generation> {
+        val localGenerations = pokemonLocalDataSource.fetchGenerations()
+        return if (localGenerations.isNotEmpty()) {
+            localGenerations.toGenerationDomain()
+        } else {
+            try {
+                val networkGenerations = pokemonRemoteDataSource.fetchGenerationList()
+                val generationLocals = networkGenerations.results.map { apiModel ->
+                    GenerationLocalModel(
+                        name = apiModel.name,
+                        url = apiModel.url,
+                        displayName = apiModel.name.replace("generation-", "Gen ").uppercase()
+                    )
+                }
+                pokemonLocalDataSource.insertGenerations(generationLocals)
+                generationLocals.toGenerationDomain()
+            } catch (_: Exception) {
+                emptyList()
+            }
+        }
+    }
+
+    override suspend fun getPokemonByGeneration(generationName: String): List<Pokemon> {
+        return try {
+            val generationDetail = pokemonRemoteDataSource.fetchGenerationDetail(generationName)
+            generationDetail.pokemonSpecies.map { species ->
+                Pokemon(
+                    name = species.name,
+                    url = species.url.replace("-species", ""),
+                    page = MINUS_ONE
+                )
+            }
+        } catch (_: Exception) {
+            emptyList()
         }
     }
 }
