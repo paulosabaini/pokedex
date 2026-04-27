@@ -8,48 +8,88 @@
 ![GitHub forks](https://img.shields.io/github/forks/paulosabaini/pokedex?style=social)
 ![GitHub watchers](https://img.shields.io/github/watchers/paulosabaini/pokedex?style=social)
 
-**Pokédex** is a sample Android application 📱 built to demonstrate the use of *Jetpack Compose* and *Modern Android development* tools.
+**Pokédex** is a modern Android application 📱 built to demonstrate the use of *Jetpack Compose* and *Modern Android development* tools.
 
-It loads **Pokémon** data from **PokéAPI** and display it with a simple and clean UI powered by **Jetpack Compose**.
+It loads **Pokémon** data from **PokéAPI** and displays it with a clean, responsive UI.
 
 ## Screenshots
 
 <img src="./screenshots/01.png" width="40%" height="30%"> <img src="./screenshots/02.png" width="40%" height="30%">
-
 <img src="./screenshots/03.png" width="40%" height="30%"> <img src="./screenshots/04.png" width="40%" height="30%"> 
 
+## Key Features 🚀
+
+- **Search & Filter**: Search for Pokémon by name and filter by generation.
+- **Dynamic Theming**: UI colors adapt dynamically to the Pokémon's dominant color using the Palette library.
+- **Offline Support**: Robust local caching with Room database for a seamless offline experience.
+- **Pagination**: Efficiently load large lists of Pokémon using the Paging 3 library.
+- **Detailed Info**: View comprehensive Pokémon details, including stats, types, and evolution chains.
+- **Modern UI**: Built entirely with Jetpack Compose and Material 3.
+
 ## Built With 🛠
-- [Kotlin](https://kotlinlang.org/) - First class and official programming language for Android development.
-- [Jetpack Compose](https://developer.android.com/jetpack/compose) - Jetpack Compose is Android’s modern toolkit for building native UI. It simplifies and accelerates UI development on Android. Quickly bring your app to life with less code, powerful tools, and intuitive Kotlin APIs.  
-- [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) - For asynchronous and more.
-- [Hilt](https://dagger.dev/hilt/)   - For dependency injection.
-- [Retrofit](https://square.github.io/retrofit/) - A type-safe HTTP client for Android and Java.
-- [Gson Converter](https://github.com/google/gson) - A Converter which uses Gson for serialization to and from JSON.
-- [Coil-kt](https://coil-kt.github.io/coil/) - An image loading library for Android backed by Kotlin Coroutines.
-- [Android Architecture Components](https://developer.android.com/topic/libraries/architecture) - Collection of libraries that help you design robust, testable, and maintainable apps.
-  - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - Stores UI-related data that isn't destroyed on UI changes.
-  - [Room](https://developer.android.com/topic/libraries/architecture/room) - SQLite object mapping library.
-  - [Paging](https://developer.android.com/topic/libraries/architecture/paging/v3-overview) - The Paging library helps you load and display pages of data from a larger dataset from local storage or over network.
-  - [Navigation](https://developer.android.com/guide/navigation) - Navigation refers to the interactions that allow users to navigate across, into, and back out from the different pieces of content within your app.
-  - [Palette](https://developer.android.com/training/material/palette-colors) - The palette library is a support library that extracts prominent colors from images to help you create visually engaging apps.
-- [Material 3](https://m3.material.io) - Material 3 is the latest version of Google’s open-source design system.
-- [Floating Action Button Speed Dial](https://github.com/leinardi/FloatingActionButtonSpeedDial) - Android library providing an implementation of the Material Design Floating Action Button Speed Dial.
+
+### Core
+- [Kotlin](https://kotlinlang.org/) - Modern programming language for Android.
+- [Jetpack Compose](https://developer.android.com/jetpack/compose) - Native UI toolkit.
+- [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) & [Flow](https://kotlinlang.org/docs/flow.html) - For asynchronous programming.
+- [Hilt](https://dagger.dev/hilt/) - Dependency injection.
+
+### Data & Networking
+- [Retrofit](https://square.github.io/retrofit/) - Type-safe HTTP client.
+- [Room](https://developer.android.com/topic/libraries/architecture/room) - SQLite object mapping.
+- [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview) - Paginated data loading.
+- [Coil](https://coil-kt.github.io/coil/) - Image loading with Coroutines.
+
+### Architecture & Tools
+- [MVVM + Clean Architecture](https://developer.android.com/jetpack/guide) - Separates concerns for better maintainability.
+- [Material 3](https://m3.material.io) - Latest design system.
+- [Palette](https://developer.android.com/training/material/palette-colors) - Dynamic color extraction from images.
+- [KSP](https://kotlinlang.org/docs/ksp-overview.html) - Kotlin Symbol Processing.
+- [Timber](https://github.com/JakeWharton/timber) - Logging.
+
+### Testing & Quality
+- [JUnit 5](https://junit.org/junit5/) - Modern testing framework.
+- [MockK](https://mockk.io/) - Mocking library for Kotlin.
+- [Turbine](https://github.com/cashapp/turbine) - Testing library for Kotlin Flows.
+- [Detekt](https://detekt.dev/) - Static code analysis.
+- [Ktlint](https://github.com/pinterest/ktlint) - Kotlin linter.
 
 ## Architecture
-This app uses the [Android recommended architecture](https://developer.android.com/jetpack/guide) for building robust, high-quality apps.
 
-<img src="https://developer.android.com/topic/libraries/architecture/images/mad-arch-overview.png" width="30%" height="30%"> <img src="https://developer.android.com/topic/libraries/architecture/images/mad-arch-overview-ui.png" width="30%" height="30%"> <img src="https://developer.android.com/topic/libraries/architecture/images/mad-arch-overview-data.png" width="30%" height="30%">
+The app follows the **Recommended Android Architecture** (Clean Architecture + MVVM):
+
+- **Data Layer**: Responsible for fetching data from the PokéAPI and caching it locally in the Room database.
+- **Domain Layer**: Contains business logic, entities, and use cases.
+- **Presentation Layer**: UI built with Jetpack Compose, using ViewModels to manage state.
+
+<img src="https://developer.android.com/topic/libraries/architecture/images/mad-arch-overview.png" width="30%" height="30%">
+
+## Development 💻
+
+### Prerequisites
+- Android Studio Ladybug or newer.
+- JDK 17.
+
+### Running Tests
+```bash
+./gradlew test
+```
+
+### Static Analysis
+```bash
+./gradlew detekt
+./gradlew lintKotlin
+```
 
 ## Open API
 
 ![](https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png)
 
 This app uses the [PokéAPI](https://pokeapi.co/).
-All the Pokémon data you'll ever need in one place, easily accessible through a modern RESTful API.
 
 ## License
 ```
-Copyright 2022 Paulo Sabaini
+Copyright 2026 Paulo Sabaini
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
